@@ -1,3 +1,5 @@
+const jwt = require("jsonwebtoken");
+
 const auth = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
@@ -8,7 +10,8 @@ const auth = async (req, res, next) => {
     const token = authHeader.split('Bearer ')[1];
   
     try {
-      //TODO: Implemented auth logic
+      const authUser = jwt.verify(token, process.env.JWT_SECRET);
+      req.body.auth = token;
       next();
     } catch (error) {
       console.error('Error verifying token:', error);
