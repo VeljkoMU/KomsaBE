@@ -9,7 +9,7 @@ const generateNearbyPoints = (long, lat, km = constants.STANDARD_PROXIMITY_OFFSE
         south: lat -latOffset,
         west: long - longOffset,
         east: long + longOffset
-    }
+    };
 };
 
 module.exports = {

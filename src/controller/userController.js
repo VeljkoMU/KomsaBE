@@ -1,6 +1,9 @@
 const UserModel = require("../model/user");
 const handleError = require("../utils/handleError");
 const { generateNearbyPoints } = require("../utils/longLatUtils");
+const express = require("express");
+const axios = require("axios");
+const googleAuth = require("google-auth-library");
 
 class UserController {
     static async getUserByEmail(req, res) {

@@ -3,7 +3,10 @@ const UserModel = require("../model/user");
 const handleError = require("../utils/handleError");
 const { INGRESS_SETTINGS_OPTIONS } = require("firebase-functions/v1");
 const jwt = require("jsonwebtoken");
-
+const express = require("express");
+const axios = require("axios");
+const googleAuth = require("google-auth-library");
+const constants = require("../utils/constants");
 
 class AuthController {
     static async register(req, res) {
@@ -80,7 +83,35 @@ class AuthController {
     }
 
     static async googleLogin(req, res) {
-        //TODO
+        try {
+        const token = req.headers.authorization;
+
+        const authResponse = await axios.post(constants.GOOGLE_AUTH_TOKEN_PATH, {
+            token,
+            client_id: '', //TODO
+            client_secret: '', //TODO
+            redirect_uri: 'postmessage',
+            grant_type: 'authorization_code'
+        });
+
+        const accessToken = authResponse.data.access_token;
+
+        const dataResponse = await axios.get(constants.GOOGLE_AUTH_DATA_PATH, {
+            headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        });
+
+        //TODO create account
+        //TODO create JWT token
+
+        return res.status(200).json({
+            //TODO
+        });
+        }
+        catch(err) {
+            handleError(res, err.message, "Google Login");
+        }
     }
 
     static async logout(req, res) {
