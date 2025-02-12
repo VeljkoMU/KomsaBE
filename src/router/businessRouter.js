@@ -9,5 +9,6 @@ router.post("/create", auth, BusinessController.create);
 router.get("/:id", auth, BusinessController.getById);
 router.put("/:id", auth, BusinessController.update);
 router.delete("/delete", auth, BusinessController.delete);
+router.get("/proximity", auth, BusinessController.findBusinessByLocation);
 
 module.exports = router;

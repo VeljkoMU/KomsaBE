@@ -71,6 +71,44 @@ class BusinessController {
       res.status(500).json({ error: error.message });
     }
   }
+
+  //find by location 2km radius
+  static async findBusinessByLocation(req, res) {
+    const { long, lat, address } = req.query;
+    if (!long || !lat) {
+      return res
+        .status(400)
+        .json({ error: "Longitude and latitude are required." });
+    }
+
+    try {
+      const nearbyOffsetPoints = generateNearbyPoints(
+        parseFloat(long),
+        parseFloat(lat),
+        2
+      );
+      const proximityQuery = {
+        location: {
+          $geoWithin: {
+            $box: [
+              [nearbyOffsetPoints.west, nearbyOffsetPoints.south],
+              [nearbyOffsetPoints.east, nearbyOffsetPoints.north],
+            ],
+          },
+        },
+      };
+      const addressQuery = address ? { address: address } : {};
+      const query = address
+        ? { $or: [proximityQuery, addressQuery] }
+        : proximityQuery;
+      const businesses = await BusinessModel.find(query);
+
+      return res.status(200).json({ businesses });
+    } catch (err) {
+      console.error("Error finding businesses by location:", err);
+      handleError(res, [err.message], "Error finding businesses by location");
+    }
+  }
 }
 
 module.exports = BusinessController;
