@@ -5,6 +5,7 @@ const app = express();
 const authRounter = require("./src/router/authRouter");
 const userRouter = require("./src/router/userRouter");
 const businessRouter = require("./src/router/businessRouter");
+const placeRouter = require("./src/router/placeRouter");
 
 app.use(express.json());
 mongoDBConnect(constants.MONGODB_ATLAS_CONN_STRING);
@@ -12,6 +13,7 @@ mongoDBConnect(constants.MONGODB_ATLAS_CONN_STRING);
 app.use("/auth", authRounter);
 app.use("/user", userRouter);
 app.use("/business", businessRouter);
+app.use("/place", placeRouter);
 
 app.listen(() => {
   console.log("Server started.");
