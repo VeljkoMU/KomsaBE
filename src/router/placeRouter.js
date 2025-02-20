@@ -9,5 +9,6 @@ router.post("/create", auth, PlaceController.create);
 router.get("/:id", auth, PlaceController.getById);
 router.put("/:id", auth, PlaceController.update);
 router.delete("/delete", auth, PlaceController.delete);
+router.get("/proximity", auth, PlaceController.findPlacesByLocation);
 
 module.exports = router;

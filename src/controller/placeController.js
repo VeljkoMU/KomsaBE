@@ -71,6 +71,44 @@ class PlaceController {
       handleError(res, [err.message], "Delete");
     }
   }
+
+  //find by location 2km radius
+  static async findPlacesByLocation(req, res) {
+    const { long, lat, address } = req.query;
+    if (!long || !lat) {
+      return res
+        .status(400)
+        .json({ error: "Longitude and latitude are required." });
+    }
+
+    try {
+      const nearbyOffsetPoints = generateNearbyPoints(
+        parseFloat(long),
+        parseFloat(lat),
+        2
+      );
+      const proximityQuery = {
+        location: {
+          $geoWithin: {
+            $box: [
+              [nearbyOffsetPoints.west, nearbyOffsetPoints.south],
+              [nearbyOffsetPoints.east, nearbyOffsetPoints.north],
+            ],
+          },
+        },
+      };
+      const addressQuery = address ? { address: address } : {};
+      const query = address
+        ? { $or: [proximityQuery, addressQuery] }
+        : proximityQuery;
+      const places = await placeModel.find(query);
+
+      return res.status(200).json({ places });
+    } catch (err) {
+      console.error("Error finding places by location:", err);
+      handleError(res, [err.message], "Error finding places by location");
+    }
+  }
 }
 
 module.exports = PlaceController;
