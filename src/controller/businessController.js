@@ -1,5 +1,5 @@
 const businessModel = require("../model/business");
-
+const handleError = require("../utils/handleError");
 class BusinessController {
   // Get all
   static async getAll(req, res) {
@@ -7,8 +7,8 @@ class BusinessController {
       const businesses = await businessModel.find();
 
       res.status(200).json(businesses);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+    } catch (err) {
+      handleError(res, [err.message], "Get All");
     }
   }
 
@@ -21,8 +21,8 @@ class BusinessController {
         return res.status(404).json({ message: "Business not found" });
       }
       res.status(200).json(business);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+    } catch (err) {
+      handleError(res, [err.message], "Get By Id");
     }
   }
 
@@ -33,8 +33,8 @@ class BusinessController {
       const savedBusiness = await newBusiness.save();
 
       res.status(201).json(savedBusiness);
-    } catch (error) {
-      res.status(400).json({ error: error.message });
+    } catch (err) {
+      handleError(res, [err.message], "Create");
     }
   }
 
@@ -51,8 +51,8 @@ class BusinessController {
         return res.status(404).json({ message: "Business not found" });
       }
       res.status(200).json(updatedBusiness);
-    } catch (error) {
-      res.status(400).json({ error: error.message });
+    } catch (err) {
+      handleError(res, [err.message], "Update");
     }
   }
 
@@ -67,8 +67,8 @@ class BusinessController {
         return res.status(404).json({ message: "Business not found" });
       }
       res.status(200).json({ message: "Business deleted successfully" });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+    } catch (err) {
+      handleError(res, [err.message], "Delete");
     }
   }
 
