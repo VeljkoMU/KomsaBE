@@ -8,22 +8,13 @@ const {
   validateProximityQuery,
 } = require("../middleware/validators/businessValidator");
 
-router.get("/", auth, BusinessController.getAll);
-router.post("/create", auth, validateCreateBusiness, BusinessController.create);
-router.get("/:id", auth, validateBusinessId, BusinessController.getById);
-router.put(
-  "/:id",
-  auth,
-  validateBusinessId,
-  validateCreateBusiness,
-  BusinessController.update
+router.get("/", BusinessController.getAll);
+router.post("/create", validateCreateBusiness, BusinessController.create);
+router.get("/:id", validateBusinessId, BusinessController.getById);
+router.put("/:id", validateBusinessId, validateCreateBusiness, BusinessController.update
 );
-router.delete("/:id", auth, validateBusinessId, BusinessController.delete);
-router.get(
-  "/proximity",
-  auth,
-  validateProximityQuery,
-  BusinessController.findBusinessByLocation
+router.delete("/:id", validateBusinessId, BusinessController.delete);
+router.get( "/proximity", validateProximityQuery, BusinessController.findBusinessByLocation
 );
 
 module.exports = router;
