@@ -29,6 +29,21 @@ const validateBusinessId = [
   },
 ];
 
+const validateTag = [
+  param("tag")
+    .isString()
+    .withMessage("Tag should be a string")
+    .notEmpty()
+    .withMessage("Tag is required"),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  },
+];
+
 const validateProximityQuery = [
   query("lat").isFloat({ min: -90, max: 90 }).withMessage("Invalid latitude"),
   query("long")
@@ -47,4 +62,5 @@ module.exports = {
   validateCreateBusiness,
   validateBusinessId,
   validateProximityQuery,
+  validateTag
 };
