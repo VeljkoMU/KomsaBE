@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/auth");
-const BusinessController = require("../controllers/BusinessController");
+const BusinessController = require("../controller/businessController");
 const {
   validateCreateBusiness,
   validateBusinessId,
