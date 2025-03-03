@@ -26,6 +26,21 @@ class BusinessController {
     }
   }
 
+  // Get by Tag
+static async getByTag(req, res) {
+  try {
+    const { tag } = req.params;
+    const businesses = await businessModel.find({ tags: { $regex: new RegExp(`^${tag}$`, 'i') }});
+
+    if (!businesses.length) {
+      return res.status(404).json({ message: "No businesses found with this tag" });
+    }
+    res.status(200).json(businesses);
+  } catch (err) {
+    handleError(res, [err.message], "Get By Tag");
+  }
+}
+
   // Create
   static async create(req, res) {
     try {
