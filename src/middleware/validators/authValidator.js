@@ -32,7 +32,7 @@ const validateRegister = [
           return res.status(400).json({ errors: errors.array() });
         }
         next();
-      },
+      }
 ];
 
 const validateLogin = [
@@ -47,7 +47,7 @@ const validateLogin = [
           return res.status(400).json({ errors: errors.array() });
         }
         next();
-      },
+      }
 ];
 
 const validateDeleteAccount = [
@@ -60,7 +60,7 @@ const validateDeleteAccount = [
           return res.status(400).json({ errors: errors.array() });
         }
         next();
-      },
+      }
 ];
 
 module.exports = {
