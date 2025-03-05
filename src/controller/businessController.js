@@ -44,7 +44,18 @@ static async getByTag(req, res) {
   // Create
   static async create(req, res) {
     try {
-      const newBusiness = new businessModel(req.body);
+      const newBusiness = new businessModel(
+        req.body,name,
+        req.body.type,
+        req.body.address,
+        req.body.place,
+        req.body.tags,
+        req.body.isPartner,
+        {
+          type: "Point",
+          coordinates: [req.body.long, req.body.lat]
+        }
+      );
       const savedBusiness = await newBusiness.save();
 
       res.status(201).json(savedBusiness);
@@ -58,7 +69,18 @@ static async getByTag(req, res) {
     try {
       const updatedBusiness = await businessModel.findByIdAndUpdate(
         req.params.id,
-        req.body,
+        {
+          name: req.body,name,
+          type: req.body.type,
+          address: req.body.address,
+          place: req.body.place,
+          tags: req.body.tags,
+          isPartner: req.body.isPartner,
+          location: {
+            type: "Point",
+            coordinates: [req.body.long, req.body.lat]
+          }
+        },
         { new: true, runValidators: true }
       );
 

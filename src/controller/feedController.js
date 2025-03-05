@@ -10,12 +10,18 @@ class FeedController {
         const  nearbyOffsetPoints = generateNearbyPoints(long, lat);
 
         try {
+
             const results = await FeedItemModel.paginate({
-                $or: [
-                {"place": place},
-                {long: {$gte: nearbyOffsetPoints.east, $lte: nearbyOffsetPoints.west},
-                lat: {$gte: nearbyOffsetPoints.south, $lte: nearbyOffsetPoints.north}}
-                ]
+                location: {
+                    $near: {
+                        $geometry: {
+                            type: "Point",
+                            coordinates: [long, lat]
+                        },
+                        $maxDistance: 2000,
+                        $minDistance: 0
+                    }
+                }
             }, {
                 page: page,
                 limit: 10,
@@ -59,8 +65,10 @@ class FeedController {
             const feedItem = new FeedItemModel({
                 userId: userId,
                 text: text,
-                lat: lat,
-                long: long,
+                location: {
+                    type: "Point",
+                    coordinates: [long, lat]
+                },
                 place: place,
                 userName: user.name,
                 imageUrls: imageUrls

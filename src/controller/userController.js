@@ -40,8 +40,16 @@ class UserController {
         try {
             const usersByAddress = await UserModel.find({address: address});
             const usersByProximity = await UserModel.find({
-                long: {$gte: nearbyOffsetPoints.east, $lte: nearbyOffsetPoints.west},
-                lat: {$gte: nearbyOffsetPoints.south, $lte: nearbyOffsetPoints.north}
+                location: {
+                    $near: {
+                        $geometry: {
+                            type: "Point",
+                            coordinates: [long, lat]
+                        },
+                        $maxDistance: 2000,
+                        $minDistance: 0
+                    }
+                }
             });
 
             const users = [...new Set(usersByAddress.concat(usersByProximity))];
@@ -79,8 +87,10 @@ class UserController {
                 place: place ?? user.place,
                 country: country ?? user.country,
                 street: street ?? user.street,
-                long: long ?? user.long,
-                lat: lat ?? user.lat,
+                location: {
+                    type: "Point",
+                    coordinates: [long, lat]
+                },
                 province: province ?? user.province
             });
 
