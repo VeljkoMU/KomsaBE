@@ -5,11 +5,15 @@ const placeSchema = mongoose.Schema({
     county: String,
     street: String,
     province: String,
-    long: Number,
-    lat: Number,
     users: [String],
-    addresses: [String]
+    addresses: [String],
+    location: {
+        type: {type: String, enum: ['Point'], required: true},
+        coordinates: {type: [Number], require: true}
+    }
 });
+
+placeSchema.index({location: "2dsphere"});
 
 const placeModel = mongoose.model("Place", placeSchema);
 

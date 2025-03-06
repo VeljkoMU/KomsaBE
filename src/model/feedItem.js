@@ -8,9 +8,13 @@ const feedItemSchema = mongoose.Schema({
     imageUrls: [String],
     timestamp: Number,
     place: {type: String, index: true},
-    lat: Number,
-    long: Number
+    location: {
+        type: {type: String, enum: ['Point'], required: true},
+        coordinates: {type: [Number], require: true}
+    }
 });
+
+feedItemSchema.index({location: "2dsphere"});
 
 feedItemSchema.plugin(mongoosePaginate);
 

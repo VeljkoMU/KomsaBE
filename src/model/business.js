@@ -7,9 +7,13 @@ const businessSchema = mongoose.Schema({
     place: String, 
     tags: [String],
     isPartner: Boolean,
-    long: String,
-    lat: String
+    location: {
+        type: {type: String, enum: ['Point'], required: true},
+        coordinates: {type: [Number], require: true}
+    }
 });
+
+businessSchema.index({location: "2dsphere"});
 
 const businessModel = mongoose.model("Business", businessSchema);
 

@@ -10,10 +10,14 @@ let userSchema = mongoose.Schema({
     province: String,
     place: {type: String, index: true},
     street: {type: String, index: true},
-    long: Number,
-    lat: Number,
-    password: String
+    password: String,
+    location: {
+        type: {type: String, enum: ['Point'], required: true},
+        coordinates: {type: [Number], require: true}
+    }
 });
+
+userSchema.index({location: "2dsphere"});
 
 const UserModel = mongoose.model("User", userSchema);
 

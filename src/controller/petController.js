@@ -11,9 +11,18 @@ class PetController {
         try {
             const results = await PetModel.paginate({
                 $or: [
-                {"place": place},
-                {long: {$gte: nearbyOffsetPoints.east, $lte: nearbyOffsetPoints.west},
-                lat: {$gte: nearbyOffsetPoints.south, $lte: nearbyOffsetPoints.north}}
+                {"place": place}, {
+                location: {
+                    $near: {
+                        $geometry: {
+                            type: "Point",
+                            coordinates: [long, lat]
+                        },
+                        $maxDistance: 2000,
+                        $minDistance: 0
+                    }
+                }
+            }
                 ]
             }, {
                 page: page,
@@ -80,8 +89,10 @@ class PetController {
                 imageUrl: imgResponse.secure_url,
                 isLost,
                 place,
-                lat,
-                long});
+                location: {
+                    type: "Point",
+                    coordinates: [long, lat]
+                }});
 
             return res.status(200).json(results);
         }

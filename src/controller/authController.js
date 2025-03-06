@@ -26,8 +26,10 @@ class AuthController {
                 place,
                 country,
                 street,
-                long,
-                lat,
+                location: {
+                    type: "Point",
+                    coordinates: [long, lat]
+                },
                 province,
                 privilage: "user",
                 validToken: token,
